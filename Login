@@ -1,0 +1,45 @@
+const express = require('express');
+const app = express();
+
+// Simulação de dados de usuários cadastrados
+const users = [
+  { username: "user1", password: "pass1" },
+  { username: "user2", password: "pass2" },
+  { username: "user3", password: "pass3" }
+];
+
+// Rota para o formulário de login
+app.get('/login', (req, res) => {
+  res.send(`
+    <h1>Login - Rede Farmacêutica</h1>
+    <form action="/authenticate" method="POST">
+      <label for="username">Usuário:</label>
+      <input type="text" id="username" name="username" required><br><br>
+
+      <label for="password">Senha:</label>
+      <input type="password" id="password" name="password" required><br><br>
+
+      <button type="submit">Entrar</button>
+    </form>
+  `);
+});
+
+// Rota para autenticação do login
+app.post('/authenticate', (req, res) => {
+  const { username, password } = req.body;
+
+  // Verificar se as credenciais estão corretas
+  const authenticated = users.some(user => user.username === username && user.password === password);
+
+  // Exibir mensagem de login bem-sucedido ou falha
+  if (authenticated) {
+    res.send("Login bem-sucedido! Bem-vindo à rede farmacêutica.");
+  } else {
+    res.send("Falha no login. Verifique suas credenciais.");
+  }
+});
+
+// Iniciar o servidor
+app.listen(3000, () => {
+  console.log('Servidor iniciado na porta 3000');
+});
